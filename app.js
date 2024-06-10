@@ -49,7 +49,9 @@ io.on('connection', (socket) => {
         onlineUsers[socket.id] = username;
         io.emit('online users', Object.values(onlineUsers));
         console.log(`${username} has logged in.`);
+
     });
+
 
     // Handle user signup
     app.post('/signup', async (req, res) => {
@@ -67,7 +69,7 @@ io.on('connection', (socket) => {
     // Handle user login
     app.post('/login', async (req, res) => {
         const { username, password } = req.body;
-        
+
         try {
             const user = await User.findOne({ username, password });
             if (user) {
@@ -97,7 +99,10 @@ io.on('connection', (socket) => {
     socket.on('send invite', (toUsername) => {
         const fromUsername = onlineUsers[socket.id];
         const toSocketId = Object.keys(onlineUsers).find(key => onlineUsers[key] === toUsername);
+        console.log(`${fromUsername} ,${toSocketId} invite is send!! `);
+
         if (toSocketId) {
+            console.log('hey correct');
             io.to(toSocketId).emit('game invite', { fromUsername, fromSocketId: socket.id });
         }
     });
@@ -114,5 +119,5 @@ io.on('connection', (socket) => {
         io.to(fromSocketId).emit('invite rejected', { toUsername });
     });
 
-   
+
 });

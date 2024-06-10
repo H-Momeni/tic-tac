@@ -17,8 +17,10 @@ function addContainer(username) {
     button.textContent = 'Invite';
 
     button.addEventListener('click', () => {
+        //console.log('User name:******************');
+
         socket.emit('send invite', username);
-        //alert('invite successful!');
+        //alert(`${username} button click `);
 
     });
 
@@ -45,13 +47,41 @@ socket.on('online users', (users) => {
 });
 
 // Listen for game invites
+// socket.on('game invite', ({fromUsername, fromSocketId } ) => {
+//     const accept = confirm(` has invited you to play. Do you accept?`);
+//    //alert('has invited you to play. Do you accept?');
+//     if (accept) {
+//         socket.emit('accept invite', fromSocketId);
+//     } else {
+//         socket.emit('reject invite', fromSocketId);
+//     }
+// });
+
+// // Listen for game invites
+// socket.on('game invite', ({ fromUsername, fromSocketId }) => {
+//     console.log('Received game invite from:', fromUsername, 'with socket ID:', fromSocketId); // Debugging log
+//     const accept = confirm(`${fromUsername} has invited you to play. Do you accept?`);
+//     console.log('Confirm dialog response:', accept); // Debugging log
+//     if (accept) {
+//         socket.emit('accept invite', fromSocketId);
+//     } else {
+//         socket.emit('reject invite', fromSocketId);
+//     }
+// });
+
+// Listen for game invites
 socket.on('game invite', ({ fromUsername, fromSocketId }) => {
-    const accept = confirm(`${fromUsername} has invited you to play. Do you accept?`);
-    if (accept) {
-        socket.emit('accept invite', fromSocketId);
-    } else {
-        socket.emit('reject invite', fromSocketId);
-    }
+    console.log('Received game invite from:', fromUsername, 'with socket ID:', fromSocketId); // Debugging log
+    setTimeout(() => {
+        
+        const accept = confirm(`${fromUsername} has invited you to play. Do you accept?`);
+        console.log('Confirm dialog response:', accept); // Debugging log
+        if (accept) {
+            socket.emit('accept invite', fromSocketId);
+        } else {
+            socket.emit('reject invite', fromSocketId);
+        }
+    }, 0);
 });
 
 // Listen for invite acceptance
