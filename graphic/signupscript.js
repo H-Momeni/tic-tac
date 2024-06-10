@@ -19,7 +19,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
             if (response.status === 201) {
                 alert(`Signup successful! Connected to socket ID: ${socket.id}`);
-                socket.emit('user signup', { username });
+                //socket.emit('user signup', { username });
+                window.location.href = '/';
             } else {
                 alert('Signup failed! Please try again.');
             }

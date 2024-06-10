@@ -40,14 +40,15 @@ app.get('/list', (req, res) => {
 // Store online users
 let onlineUsers = {};
 
+
 io.on('connection', (socket) => {
     console.log('User connected:', socket.id);
 
     // Handle user login
-    socket.on('user login', (username) => {
-        onlineUsers[socket.id] = username;
+    socket.on('user login', () => {
+        onlineUsers[socket.id] = username1;
         io.emit('online users', Object.values(onlineUsers));
-        console.log(`${username} has logged in.`);
+        console.log(`${username1} has logged in.`);
     });
 
     // Handle user signup
@@ -63,11 +64,11 @@ io.on('connection', (socket) => {
         }
     });
 
-
     // Handle user login
+    let username1;
     app.post('/login', async (req, res) => {
         const { username, password } = req.body;
-
+        username1=username;
         try {
             const user = await User.findOne({ username, password });
             if (user) {
@@ -80,7 +81,6 @@ io.on('connection', (socket) => {
             res.status(500).send('Server error');
         }
     });
-
 
     // Handle disconnection
     socket.on('disconnect', () => {
@@ -114,13 +114,6 @@ io.on('connection', (socket) => {
         const toUsername = onlineUsers[socket.id];
         io.to(fromSocketId).emit('invite rejected', { toUsername });
     });
+
+   
 });
-
-// // Serve login and signup pages
-// app.get('/', (req, res) => {
-//     res.sendFile(path.join(__dirname, 'graphic/login.html'));
-// });
-
-// app.get('/signup', (req, res) => {
-//     res.sendFile(path.join(__dirname, 'graphic/signup.html'));
-// });

@@ -1,6 +1,7 @@
-let containerCount = 1;
+const socket = io();
 
-function addContainer() {
+// Function to add a container for each user
+function addContainer(username) {
     const containerList = document.getElementById('container-list');
 
     // Create new container div
@@ -9,7 +10,7 @@ function addContainer() {
 
     // Create label
     const label = document.createElement('label');
-    label.textContent = `User ${containerCount}`;
+    label.textContent = username;
 
     // Create button
     const button = document.createElement('button');
@@ -21,12 +22,24 @@ function addContainer() {
 
     // Append container to container list
     containerList.appendChild(newContainer);
-
-    containerCount++;
 }
 
-// Add initial container
-addContainer();
+// Function to clear the container list
+function clearContainers() {
+    const containerList = document.getElementById('container-list');
+    containerList.innerHTML = '';
+}
 
-// Add a new container every 5 seconds
-setInterval(addContainer, 500);
+// Listen for online users update
+socket.on('online users', (users) => {
+    clearContainers();
+    users.forEach(username => {
+        addContainer(username);
+    });
+});
+
+// Emit user login event when the page loads (for demo purposes, replace with actual username)
+document.addEventListener('DOMContentLoaded', () => {
+    const username = prompt('Enter your username:');
+    socket.emit('user login', username);
+});
