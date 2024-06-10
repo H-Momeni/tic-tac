@@ -1,15 +1,35 @@
 document.addEventListener('DOMContentLoaded', (event) => {
+    const socket = io();
+
     const loginButton = document.getElementById('loginButton');
     const signupButton = document.getElementById('signupButton');
 
-    loginButton.addEventListener('click', () => {
+    loginButton.addEventListener('click', async () => {
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
-        alert(`Login clicked! Username: ${username}, Password: ${password}`);
-        // Add your login logic here
+
+        try {
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            });
+
+            if (response.status === 200) {
+                alert(`Login successful! Connected to socket ID: ${socket.id}`);
+                socket.emit('user login', { username });
+            } else {
+                alert('Login failed! Invalid credentials.');
+            }
+        } catch (err) {
+            console.error('Error during login:', err);
+            alert('Login failed! Server error.');
+        }
     });
 
     signupButton.addEventListener('click', () => {
-        window.location.href = 'signup.html';
+        window.location.href = '/signup';
     });
 });

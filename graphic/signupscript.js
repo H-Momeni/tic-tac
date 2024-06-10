@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', (event) => {
+    const socket = io();
+
     const signupButton = document.getElementById('signupButton');
     const backButton = document.getElementById('backButton');
 
@@ -15,20 +17,19 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 body: JSON.stringify({ username, password })
             });
 
-            if (response.ok) {
-                alert('Signup successful!');
-                window.location.href = '/';
+            if (response.status === 201) {
+                alert(`Signup successful! Connected to socket ID: ${socket.id}`);
+                socket.emit('user signup', { username });
             } else {
-                const error = await response.text();
-                alert('Signup failed: ' + error);
+                alert('Signup failed! Please try again.');
             }
         } catch (err) {
-            console.error('Error:', err);
-            alert('An error occurred while signing up.');
+            console.error('Error during signup:', err);
+            alert('Signup failed! Server error.');
         }
     });
 
     backButton.addEventListener('click', () => {
-        window.location.href = '/'; // Adjust the path if necessary
+        window.location.href = '/';
     });
 });
