@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', (event) => {
+document.addEventListener('DOMContentLoaded', () => {
     const socket = io();
 
     const loginButton = document.getElementById('loginButton');
@@ -18,10 +18,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
             });
 
             if (response.status === 200) {
-                alert(`Login successful! Connected to socket ID: ${socket.id}`);
+                alert('Login successful!');
                 socket.emit('user login', { username });
+                window.location.href = '/list'; // Redirect to user list page
             } else {
-                alert('Login failed! Invalid credentials.');
+                alert('Invalid credentials. Please try again.');
             }
         } catch (err) {
             console.error('Error during login:', err);
