@@ -45,10 +45,10 @@ io.on('connection', (socket) => {
     console.log('User connected:', socket.id);
 
     // Handle user login
-    socket.on('user login', () => {
-        onlineUsers[socket.id] = username1;
+    socket.on('user login', (username) => {
+        onlineUsers[socket.id] = username;
         io.emit('online users', Object.values(onlineUsers));
-        console.log(`${username1} has logged in.`);
+        console.log(`${username} has logged in.`);
     });
 
     // Handle user signup
@@ -65,10 +65,9 @@ io.on('connection', (socket) => {
     });
 
     // Handle user login
-    let username1;
     app.post('/login', async (req, res) => {
         const { username, password } = req.body;
-        username1=username;
+        
         try {
             const user = await User.findOne({ username, password });
             if (user) {

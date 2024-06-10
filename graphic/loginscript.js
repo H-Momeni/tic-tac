@@ -19,7 +19,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (response.status === 200) {
                 alert('Login successful!');
-                socket.emit('user login', { username });
+
+                // Store the username in localStorage
+                localStorage.setItem('username', username);
+
+                socket.emit('user login', username);
+
+
                 window.location.href = '/list'; // Redirect to user list page
             } else {
                 alert('Invalid credentials. Please try again.');
