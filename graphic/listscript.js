@@ -69,19 +69,27 @@ socket.on('online users', (users) => {
 //     }
 // });
 
+const inviteModal = document.getElementById('inviteModal');
+const inviteText = document.getElementById('inviteText');
+const acceptButton = document.getElementById('acceptButton');
+const rejectButton = document.getElementById('rejectButton');
+
 // Listen for game invites
 socket.on('game invite', ({ fromUsername, fromSocketId }) => {
     console.log('Received game invite from:', fromUsername, 'with socket ID:', fromSocketId); // Debugging log
-    setTimeout(() => {
-        
-        const accept = confirm(`${fromUsername} has invited you to play. Do you accept?`);
-        console.log('Confirm dialog response:', accept); // Debugging log
-        if (accept) {
-            socket.emit('accept invite', fromSocketId);
-        } else {
-            socket.emit('reject invite', fromSocketId);
-        }
-    }, 0);
+    inviteText.textContent = `${fromUsername} has invited you to play. Do you accept?`;
+    inviteModal.style.display = 'block';
+
+    acceptButton.onclick = () => {
+        inviteModal.style.display = 'none';
+        socket.emit('accept invite', fromSocketId);
+    };
+
+    rejectButton.onclick = () => {
+        inviteModal.style.display = 'none';
+        socket.emit('reject invite', fromSocketId);
+    };
+
 });
 
 // Listen for invite acceptance
