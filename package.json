@@ -12,6 +12,9 @@
   "dependencies": {
     "express": "^4.19.2",
     "mongoose": "^8.4.1",
-    "socket.io": "^4.7.5"
+    "peer": "^1.0.2",
+    "peerjs": "^1.5.4",
+    "socket.io": "^4.7.5",
+    "socket.io-p2p-server": "^1.2.0"
   }
 }

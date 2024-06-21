@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const socketIO = require('socket.io');
+var p2p = require('socket.io-p2p-server').Server;
 const http = require('http');
 const User = require('./models/User'); // Import the User model
 
@@ -37,6 +38,9 @@ app.get('/list', (req, res) => {
     res.sendFile(path.join(__dirname, 'graphic/list.html'));
 });
 
+app.get('/tic', (req, res) => {
+    res.sendFile(path.join(__dirname, 'graphic/tic.html'));
+});
 // Store online users
 let onlineUsers = {};
 
@@ -110,7 +114,11 @@ io.on('connection', (socket) => {
     // Handle invite acceptance
     socket.on('accept invite', (fromSocketId) => {
         const toUsername = onlineUsers[socket.id];
-        io.to(fromSocketId).emit('invite accepted', { toUsername, toSocketId: socket.id });
+        const toSocketId = socket.id;
+        io.to(fromSocketId).emit('invite accepted', { toUsername, toSocketId });
+        io.to(toSocketId).emit('redirect to game');
+        io.to(fromSocketId).emit('redirect to game');
+
     });
 
     // Handle invite rejection
@@ -118,6 +126,8 @@ io.on('connection', (socket) => {
         const toUsername = onlineUsers[socket.id];
         io.to(fromSocketId).emit('invite rejected', { toUsername });
     });
+
+   
 
 
 });

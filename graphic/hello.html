@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            text-align: center;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: white;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Say Hello</h1>
+        <button id="sayHelloButton">Say Hello</button>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/peerjs@1.3.2/dist/peerjs.min.js"></script>
+    <script>
+        const socket = io(); // Initialize socket.io
+
+        socket.on('connect', () => {
+            console.log('Connected to server');
+        });
+
+        // Connect to the PeerJS server running locally
+        const peer = new Peer({
+            host: 'localhost',
+            port: 9000,
+            path: '/'
+        });
+
+        peer.on('open', (id) => {
+            console.log('My peer ID is: ' + id);
+            localStorage.setItem('peerId', id);
+
+            // Send the peer ID to the server to notify others
+            socket.emit('user connected', id);
+        });
+
+        const sayHelloButton = document.getElementById('sayHelloButton');
+
+        // Send hello message via P2P connection
+        sayHelloButton.addEventListener('click', () => {
+            const peerId = localStorage.getItem('peerId');
+            const username = localStorage.getItem('username');
+            const message = `${username} says hello`;
+
+            // Broadcast the message to all connected peers
+            peer.listAllPeers((peers) => {
+                peers.forEach((id) => {
+                   
+                        const conn = peer.connect(id);
+                        conn.on('open', () => {
+                            conn.send(message);
+                        });
+                    
+                });
+            });
+        });
+
+        // Receive hello message via P2P connection
+        peer.on('connection', (conn) => {
+            conn.on('data', (message) => {
+                alert(message);
+            });
+        });
+
+        // Redirect to hello page when the invite is accepted
+        socket.on('redirect to hello', () => {
+            window.location.href = '/hello';
+        });
+    </script>
+</body>
+</html>
