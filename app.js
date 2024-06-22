@@ -43,10 +43,14 @@ app.get('/tic', (req, res) => {
 });
 // Store online users
 let onlineUsers = {};
+let usergame = {};
+const groups = {};
 
 
 io.on('connection', (socket) => {
     console.log('User connected:', socket.id);
+
+
 
     // Handle user login
     socket.on('user login', (username) => {
@@ -55,6 +59,8 @@ io.on('connection', (socket) => {
         console.log(`${username} has logged in.`);
 
     });
+
+
 
 
     // Handle user signup
@@ -91,6 +97,7 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         console.log('User disconnected:', socket.id);
         delete onlineUsers[socket.id];
+        delete usergame[socket.id];
         io.emit('online users', Object.values(onlineUsers));
     });
 
@@ -111,13 +118,77 @@ io.on('connection', (socket) => {
         }
     });
 
+    let findgroupid;
+
+    // Handle box change
+    socket.on('box change', ({ boxId, value }) => {
+        // Broadcast the change to all other members of the group
+
+        for (const groupId in groups) {
+            // Check if the group exists
+            if (groups.hasOwnProperty(groupId)) {
+                // Iterate through the members in the group
+                for (let i = 0; i < groups[groupId].members.length; i++) {
+                    // Check if the current member's socket ID matches the target socket ID
+                    if (groups[groupId].members[i].socketId === socket.id) {
+                        // If a match is found, return the group ID
+                        findgroupid= groupId;
+                    }
+                }
+            }
+        }
+
+        const group = groups[findgroupid];
+
+
+        if (group) {
+            group.members.forEach(member => {
+                if (member.socketId !== socket.id) {
+                    io.to(member.socketId).emit('box update', { boxId, value });
+                }
+            });
+        }
+    });
+
+    // Handle user login for game page
+    socket.on('user login game page', ({ username, groupId }) => {
+        usergame[socket.id] = { username, groupId };
+
+        const memberIndex = groups[groupId]?.members.findIndex(
+            (member) => member.username === username
+        );//????? syntax
+
+        // Update the socketId of the member
+        if (memberIndex !== -1) {
+            groups[groupId].members[memberIndex].socketId = socket.id;
+        }
+        console.log(`${username} has logged in game page with group ${groupId}. and socket id is ${socket.id}`);
+
+    });
+
+   
+
     // Handle invite acceptance
     socket.on('accept invite', (fromSocketId) => {
         const toUsername = onlineUsers[socket.id];
         const toSocketId = socket.id;
+        const fromUsername = onlineUsers[fromSocketId];
+
+        // Create a unique group ID
+        const groupId = `group_${fromUsername}_${toUsername}`;
+        groups[groupId] = {
+            members: [
+                { username: toUsername, socketId: 1 },
+                { username: fromUsername, socketId: 2 }
+            ]
+        };
+
+        console.log(`${toUsername} ,${toSocketId} ,${fromSocketId} ,${fromUsername} `);
         io.to(fromSocketId).emit('invite accepted', { toUsername, toSocketId });
-        io.to(toSocketId).emit('redirect to game');
-        io.to(fromSocketId).emit('redirect to game');
+        io.to(toSocketId).emit('redirect to game', { username: toUsername, groupId });
+        setTimeout(() => {
+            io.to(fromSocketId).emit('redirect to game', { username: fromUsername, groupId });
+          }, 1000);
 
     });
 
@@ -127,7 +198,7 @@ io.on('connection', (socket) => {
         io.to(fromSocketId).emit('invite rejected', { toUsername });
     });
 
-   
+
 
 
 });

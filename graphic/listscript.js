@@ -68,13 +68,19 @@ socket.on('game invite', ({ fromUsername, fromSocketId }) => {
 
 });
 
-function redirectToPage() {
+function redirectToPage(username,groupId) {
+
+    localStorage.setItem('username', username);
+    localStorage.setItem('groupId', groupId);
+
+    socket.emit('user login game page',{username,groupId});
     window.location.href = `/tic`;
 }
 
 // Listen for redirection to the game
-socket.on('redirect to game', () => {
-    redirectToPage();
+socket.on('redirect to game', ({username,groupId}) => {
+    //alert(`${username1}`)
+    redirectToPage(username,groupId);
 });
 
 
