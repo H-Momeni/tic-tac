@@ -139,7 +139,7 @@ io.on('connection', (socket) => {
         }
 
         const group = groups[findgroupid];
-
+       // const group = groups[usergame[socket.id].groupId];   //in ro be jay halghe ye bala gofte
 
         if (group) {
             group.members.forEach(member => {
@@ -150,13 +150,24 @@ io.on('connection', (socket) => {
         }
     });
 
+     // Handle turn update
+     socket.on('update turn', ({ flag }) => {
+        const group = groups[usergame[socket.id].groupId];
+        if (group) {
+            group.flag = flag; // Update the flag in the group object
+            group.members.forEach(member => {
+                io.to(member.socketId).emit('turn update', { flag });
+            });
+        }
+    });
+
     // Handle user login for game page
     socket.on('user login game page', ({ username, groupId }) => {
         usergame[socket.id] = { username, groupId };
 
         const memberIndex = groups[groupId]?.members.findIndex(
             (member) => member.username === username
-        );//????? syntax
+        );
 
         // Update the socketId of the member
         if (memberIndex !== -1) {
@@ -164,6 +175,9 @@ io.on('connection', (socket) => {
         }
         console.log(`${username} has logged in game page with group ${groupId}. and socket id is ${socket.id}`);
 
+
+        // Emit the current turn flag to the new user
+        socket.emit('turn update', { flag: groups[groupId].flag });
     });
 
    

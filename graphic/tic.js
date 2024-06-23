@@ -4,9 +4,13 @@ const socket = io();
 function handleBoxChange(boxId) {
 	const box = document.getElementById(boxId);
 	const value = box.value;
-
+	
 	// Emit the box change event to the server
 	socket.emit('box change', {boxId,value});
+
+	// Switch turns
+    flag = flag === 1 ? 0 : 1;
+    updateTurn();
 }
 
 // Function called whenever user tab on any box 
@@ -24,8 +28,7 @@ function myfunc() {
 	b8 = document.getElementById("b8").value;
 	b9 = document.getElementById("b9").value;
 
-	var b1btn, b2btn, b3btn, b4btn, b5btn,
-		b6btn, b7btn, b8btn, b9btn;
+	var b1btn, b2btn, b3btn, b4btn, b5btn,b6btn, b7btn, b8btn, b9btn;
 
 	b1btn = document.getElementById("b1");
 	b2btn = document.getElementById("b2");
@@ -331,7 +334,7 @@ function myfunc_3() {
 		flag = 1;
 	}
 
-	handleBoxChange("b1");
+	handleBoxChange("b1",flag);
 }
 
 function myfunc_4() {
@@ -345,7 +348,7 @@ function myfunc_4() {
 		document.getElementById("b2").disabled = true;
 		flag = 1;
 	}
-	handleBoxChange("b2");
+	handleBoxChange("b2",flag);
 
 }
 
@@ -360,7 +363,7 @@ function myfunc_5() {
 		document.getElementById("b3").disabled = true;
 		flag = 1;
 	}
-	handleBoxChange("b3");
+	handleBoxChange("b3",flag);
 
 }
 
@@ -375,7 +378,7 @@ function myfunc_6() {
 		document.getElementById("b4").disabled = true;
 		flag = 1;
 	}
-	handleBoxChange("b4");
+	handleBoxChange("b4",flag);
 
 }
 
@@ -390,7 +393,7 @@ function myfunc_7() {
 		document.getElementById("b5").disabled = true;
 		flag = 1;
 	}
-	handleBoxChange("b5");
+	handleBoxChange("b5",flag);
 
 }
 
@@ -405,7 +408,7 @@ function myfunc_8() {
 		document.getElementById("b6").disabled = true;
 		flag = 1;
 	}
-	handleBoxChange("b6");
+	handleBoxChange("b6",flag);
 
 }
 
@@ -420,7 +423,7 @@ function myfunc_9() {
 		document.getElementById("b7").disabled = true;
 		flag = 1;
 	}
-	handleBoxChange("b7");
+	handleBoxChange("b7",flag);
 
 }
 
@@ -435,7 +438,7 @@ function myfunc_10() {
 		document.getElementById("b8").disabled = true;
 		flag = 1;
 	}
-	handleBoxChange("b8");
+	handleBoxChange("b8",flag);
 
 }
 
@@ -450,18 +453,31 @@ function myfunc_11() {
 		document.getElementById("b9").disabled = true;
 		flag = 1;
 	}
-	handleBoxChange("b9");
+	handleBoxChange("b9",flag);
 
 }
 
+function updateTurn() {
+    socket.emit('update turn', { flag });
+}
+
+// Listen for turn updates from the server
+socket.on('turn update', ({ flag: serverFlag }) => {
+    flag = serverFlag;
+    const boxes = document.querySelectorAll('.box');
+    boxes.forEach(box => box.disabled = flag === 1 ? box.value === "X" : box.value === "0");
+    document.getElementById('print').innerHTML = flag === 1 ? "Player X Turn" : "Player 0 Turn";
+});
 
 // Listen for box updates from the server
-socket.on('box update', ({ boxId, value }) => {
+socket.on('box update', ({ boxId, value,flag }) => {
 	const box = document.getElementById(boxId);
 	if (box) {
 		box.value = value;
 		box.disabled = true; // Disable the box to prevent further changes
+		
 	}
+	
 });
 
 
@@ -481,4 +497,20 @@ document.addEventListener('DOMContentLoaded', () => {
 		window.location.href = '/list'; // Redirect to list page if no username is found
 	}
 
+});
+
+
+function handleBoxClick(boxId) {
+    if ((flag === 1 && boxId.includes('X')) || (flag === 0 && boxId.includes('0'))) {
+        return; // Prevent the inactive player from making a move
+    }
+
+    document.getElementById(boxId).value = flag === 1 ? 'X' : '0';
+    document.getElementById(boxId).disabled = true;
+    handleBoxChange(boxId);
+}
+
+// Attach event listeners to each box
+document.querySelectorAll('.box').forEach(box => {
+    box.addEventListener('click', () => handleBoxClick(box.id));
 });
