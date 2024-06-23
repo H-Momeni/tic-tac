@@ -76,7 +76,7 @@ function redirectToPage(username,groupId) {
     
 
     socket.emit('user login game page',{username,groupId});
-    window.location.href = `/tac`;
+    window.location.href = `/tic`;
 }
 
 // Listen for redirection to the game
@@ -84,6 +84,23 @@ socket.on('redirect to game', ({username,groupId}) => {
     //alert(`${username1}`)
     redirectToPage(username,groupId);
 });
+
+function redirectToPagee(username,groupId) {
+
+    localStorage.setItem('username', username);
+    localStorage.setItem('groupId', groupId);
+    
+
+    socket.emit('user login game page',{username,groupId});
+    window.location.href = `/toe`;
+}
+
+// Listen for redirection to the game
+socket.on('redirect to gamee', ({username,groupId}) => {
+    //alert(`${username1}`)
+    redirectToPagee(username,groupId);
+});
+
 
 
 
