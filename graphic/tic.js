@@ -1,12 +1,20 @@
 const socket = io();
 
+let flag=1;
+
 // Function to handle box value changes and notify the server
 function handleBoxChange(boxId) {
 	const box = document.getElementById(boxId);
 	const value = box.value;
+	console.log(`flag:${flag}`);
+
 
 	// Emit the box change event to the server
 	socket.emit('box change', {boxId,value});
+
+	socket.emit('flag change', flag);
+
+
 }
 
 // Function called whenever user tab on any box 
@@ -318,7 +326,8 @@ function myfunc_2() {
 
 // Here onwards, functions check turn of the player 
 // and put accordingly value X or 0 
-flag = 1;
+
+// flag = 1;
 function myfunc_3() {
 	if (flag == 1) {
 		document.getElementById("b1").value = "X";
@@ -464,6 +473,14 @@ socket.on('box update', ({ boxId, value }) => {
 	}
 });
 
+// Listen for box updates from the server
+socket.on('flag update', (updateFlag) => {
+	
+	falg=!updateFlag;
+
+	console.log(`flag**:${flag}`);
+});
+
 
 
 
@@ -472,7 +489,8 @@ socket.on('box update', ({ boxId, value }) => {
 document.addEventListener('DOMContentLoaded', () => {
 	const username = localStorage.getItem('username');
 	const groupId = localStorage.getItem('groupId');
-
+	flag=1;
+	
 	if (username && groupId) {
 		socket.emit('user login game page', { username, groupId });
 

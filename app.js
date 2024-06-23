@@ -38,8 +38,8 @@ app.get('/list', (req, res) => {
     res.sendFile(path.join(__dirname, 'graphic/list.html'));
 });
 
-app.get('/tic', (req, res) => {
-    res.sendFile(path.join(__dirname, 'graphic/tic.html'));
+app.get('/tac', (req, res) => {
+    res.sendFile(path.join(__dirname, 'graphic/tac.html'));
 });
 // Store online users
 let onlineUsers = {};
@@ -132,7 +132,7 @@ io.on('connection', (socket) => {
                     // Check if the current member's socket ID matches the target socket ID
                     if (groups[groupId].members[i].socketId === socket.id) {
                         // If a match is found, return the group ID
-                        findgroupid= groupId;
+                        findgroupid = groupId;
                     }
                 }
             }
@@ -151,6 +151,38 @@ io.on('connection', (socket) => {
     });
 
     // Handle user login for game page
+    socket.on('flag change', (flag) => {
+        for (const groupId in groups) {
+            // Check if the group exists
+            if (groups.hasOwnProperty(groupId)) {
+                // Iterate through the members in the group
+                for (let i = 0; i < groups[groupId].members.length; i++) {
+                    // Check if the current member's socket ID matches the target socket ID
+                    if (groups[groupId].members[i].socketId === socket.id) {
+                        // If a match is found, return the group ID
+                        findgroupid = groupId;
+                    }
+                }
+            }
+        }
+
+        const group = groups[findgroupid];
+
+
+        if (group) {
+            group.members.forEach(member => {
+                if (member.socketId !== socket.id) {
+                    io.to(member.socketId).emit('flag update',  flag );
+                }
+            });
+        }
+
+        console.log(`${flag} is value of flag********`);
+
+
+    });
+
+    // Handle user login for game page
     socket.on('user login game page', ({ username, groupId }) => {
         usergame[socket.id] = { username, groupId };
 
@@ -166,7 +198,7 @@ io.on('connection', (socket) => {
 
     });
 
-   
+
 
     // Handle invite acceptance
     socket.on('accept invite', (fromSocketId) => {
@@ -188,7 +220,7 @@ io.on('connection', (socket) => {
         io.to(toSocketId).emit('redirect to game', { username: toUsername, groupId });
         setTimeout(() => {
             io.to(fromSocketId).emit('redirect to game', { username: fromUsername, groupId });
-          }, 1000);
+        }, 1000);
 
     });
 
