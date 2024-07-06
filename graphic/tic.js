@@ -77,8 +77,10 @@ function myfunc() {
 	// that disabled all the other fields 
 	if ((b1 == 'x' || b1 == 'X') && (b2 == 'x' ||
 		b2 == 'X') && (b3 == 'x' || b3 == 'X')) {
-		document.getElementById('print')
-			.innerHTML = "Player X won";
+
+		socket.emit('save winner', { winner: 'Player2' });
+
+		document.getElementById('print').innerHTML = "Player X won";
 		b4btn.disabled = true;
 		b5btn.disabled = true;
 		b6btn.disabled = true;
@@ -89,9 +91,17 @@ function myfunc() {
 		b1btn.style.color = "red";
 		b2btn.style.color = "red";
 		b3btn.style.color = "red";
+
+        socket.emit('go to list page2',);
+		
+
+		// window.location.href = '/list'; // Redirect to user list page
+
 	}
 	else if ((b1 == 'x' || b1 == 'X') && (b4 == 'x' ||
 		b4 == 'X') && (b7 == 'x' || b7 == 'X')) {
+		socket.emit('save winner', { winner: 'Player2' });
+
 		document.getElementById('print')
 			.innerHTML = "Player X won";
 		b2btn.disabled = true;
@@ -104,9 +114,16 @@ function myfunc() {
 		b1btn.style.color = "red";
 		b4btn.style.color = "red";
 		b7btn.style.color = "red";
+		
+        socket.emit('go to list page2',);
+
+		// window.location.href = '/list'; // Redirect to user list page
+
 	}
 	else if ((b7 == 'x' || b7 == 'X') && (b8 == 'x' ||
 		b8 == 'X') && (b9 == 'x' || b9 == 'X')) {
+		socket.emit('save winner', { winner: 'Player2' });
+
 		document.getElementById('print')
 			.innerHTML = "Player X won";
 
@@ -120,9 +137,17 @@ function myfunc() {
 		b7btn.style.color = "red";
 		b8btn.style.color = "red";
 		b9btn.style.color = "red";
+
+        socket.emit('go to list page2',);
+
+
+		// window.location.href = '/list'; // Redirect to user list page
+
 	}
 	else if ((b3 == 'x' || b3 == 'X') && (b6 == 'x' ||
 		b6 == 'X') && (b9 == 'x' || b9 == 'X')) {
+		socket.emit('save winner', { winner: 'Player2' });
+
 		document.getElementById('print')
 			.innerHTML = "Player X won";
 
@@ -136,9 +161,17 @@ function myfunc() {
 		b3btn.style.color = "red";
 		b6btn.style.color = "red";
 		b9btn.style.color = "red";
+
+        socket.emit('go to list page2',);
+
+
+		// window.location.href = '/list'; // Redirect to user list page
+
 	}
 	else if ((b1 == 'x' || b1 == 'X') && (b5 == 'x' ||
 		b5 == 'X') && (b9 == 'x' || b9 == 'X')) {
+		socket.emit('save winner', { winner: 'Player2' });
+
 		document.getElementById('print')
 			.innerHTML = "Player X won";
 		b2btn.disabled = true;
@@ -151,9 +184,17 @@ function myfunc() {
 		b1btn.style.color = "red";
 		b5btn.style.color = "red";
 		b9btn.style.color = "red";
+
+        socket.emit('go to list page2',);
+
+
+		// window.location.href = '/list'; // Redirect to user list page
+
 	}
 	else if ((b3 == 'x' || b3 == 'X') && (b5 == 'x' ||
 		b5 == 'X') && (b7 == 'x' || b7 == 'X')) {
+		socket.emit('save winner', { winner: 'Player2' });
+
 		document.getElementById('print')
 			.innerHTML = "Player X won";
 		b1btn.disabled = true;
@@ -166,9 +207,17 @@ function myfunc() {
 		b3btn.style.color = "red";
 		b5btn.style.color = "red";
 		b7btn.style.color = "red";
+
+        socket.emit('go to list page2',);
+
+
+		// window.location.href = '/list'; // Redirect to user list page
+
 	}
 	else if ((b2 == 'x' || b2 == 'X') && (b5 == 'x' ||
 		b5 == 'X') && (b8 == 'x' || b8 == 'X')) {
+		socket.emit('save winner', { winner: 'Player2' });
+
 		document.getElementById('print')
 			.innerHTML = "Player X won";
 		b1btn.disabled = true;
@@ -181,9 +230,17 @@ function myfunc() {
 		b2btn.style.color = "red";
 		b5btn.style.color = "red";
 		b8btn.style.color = "red";
+
+        socket.emit('go to list page2',);
+
+
+		// window.location.href = '/list'; // Redirect to user list page
+
 	}
 	else if ((b4 == 'x' || b4 == 'X') && (b5 == 'x' ||
 		b5 == 'X') && (b6 == 'x' || b6 == 'X')) {
+		socket.emit('save winner', { winner: 'Player2' });
+
 		document.getElementById('print')
 			.innerHTML = "Player X won";
 		b1btn.disabled = true;
@@ -196,6 +253,12 @@ function myfunc() {
 		b4btn.style.color = "red";
 		b5btn.style.color = "red";
 		b6btn.style.color = "red";
+
+        socket.emit('go to list page2',);
+
+
+		// window.location.href = '/list'; // Redirect to user list page
+
 	}
 
 	// Checking of Player X finish 
@@ -203,6 +266,8 @@ function myfunc() {
 	// not and after that disabled all the other fields 
 	else if ((b1 == '0' || b1 == '0') && (b2 == '0' ||
 		b2 == '0') && (b3 == '0' || b3 == '0')) {
+		socket.emit('save winner', { winner: 'Player1' });
+
 		document.getElementById('print')
 			.innerHTML = "Player 0 won";
 		b4btn.disabled = true;
@@ -215,9 +280,17 @@ function myfunc() {
 		b1btn.style.color = "red";
 		b2btn.style.color = "red";
 		b3btn.style.color = "red";
+
+        socket.emit('go to list page2',);
+
+
+		// window.location.href = '/list'; // Redirect to user list page
+
 	}
 	else if ((b1 == '0' || b1 == '0') && (b4 == '0' ||
 		b4 == '0') && (b7 == '0' || b7 == '0')) {
+		socket.emit('save winner', { winner: 'Player1' });
+
 		document.getElementById('print')
 			.innerHTML = "Player 0 won";
 		b2btn.disabled = true;
@@ -230,9 +303,17 @@ function myfunc() {
 		b1btn.style.color = "red";
 		b4btn.style.color = "red";
 		b7btn.style.color = "red";
+
+        socket.emit('go to list page2',);
+
+
+		// window.location.href = '/list'; // Redirect to user list page
+
 	}
 	else if ((b7 == '0' || b7 == '0') && (b8 == '0' ||
 		b8 == '0') && (b9 == '0' || b9 == '0')) {
+		socket.emit('save winner', { winner: 'Player1' });
+
 		document.getElementById('print')
 			.innerHTML = "Player 0 won";
 		b1btn.disabled = true;
@@ -245,9 +326,16 @@ function myfunc() {
 		b7btn.style.color = "red";
 		b8btn.style.color = "red";
 		b9btn.style.color = "red";
+
+        socket.emit('go to list page2',);
+
+		// window.location.href = '/list'; // Redirect to user list page
+
 	}
 	else if ((b3 == '0' || b3 == '0') && (b6 == '0' ||
 		b6 == '0') && (b9 == '0' || b9 == '0')) {
+		socket.emit('save winner', { winner: 'Player1' });
+
 		document.getElementById('print')
 			.innerHTML = "Player 0 won";
 		b1btn.disabled = true;
@@ -259,9 +347,16 @@ function myfunc() {
 		b3btn.style.color = "red";
 		b6btn.style.color = "red";
 		b9btn.style.color = "red";
+
+        socket.emit('go to list page2',);
+
+		// window.location.href = '/list'; // Redirect to user list page
+
 	}
 	else if ((b1 == '0' || b1 == '0') && (b5 == '0' ||
 		b5 == '0') && (b9 == '0' || b9 == '0')) {
+		socket.emit('save winner', { winner: 'Player1' });
+
 		document.getElementById('print')
 			.innerHTML = "Player 0 won";
 		b2btn.disabled = true;
@@ -274,9 +369,16 @@ function myfunc() {
 		b1btn.style.color = "red";
 		b5btn.style.color = "red";
 		b9btn.style.color = "red";
+
+        socket.emit('go to list page2',);
+
+		// window.location.href = '/list'; // Redirect to user list page
+
 	}
 	else if ((b3 == '0' || b3 == '0') && (b5 == '0' ||
 		b5 == '0') && (b7 == '0' || b7 == '0')) {
+		socket.emit('save winner', { winner: 'Player1' });
+
 		document.getElementById('print')
 			.innerHTML = "Player 0 won";
 		b1btn.disabled = true;
@@ -289,9 +391,17 @@ function myfunc() {
 		b3btn.style.color = "red";
 		b5btn.style.color = "red";
 		b7btn.style.color = "red";
+
+        socket.emit('go to list page2',);
+
+
+		// window.location.href = '/list'; // Redirect to user list page
+
 	}
 	else if ((b2 == '0' || b2 == '0') && (b5 == '0' ||
 		b5 == '0') && (b8 == '0' || b8 == '0')) {
+		socket.emit('save winner', { winner: 'Player1' });
+
 		document.getElementById('print')
 			.innerHTML = "Player 0 won";
 		b1btn.disabled = true;
@@ -304,9 +414,16 @@ function myfunc() {
 		b2btn.style.color = "red";
 		b5btn.style.color = "red";
 		b8btn.style.color = "red";
+
+        socket.emit('go to list page2',);
+
+		// window.location.href = '/list'; // Redirect to user list page
+
 	}
 	else if ((b4 == '0' || b4 == '0') && (b5 == '0' ||
 		b5 == '0') && (b6 == '0' || b6 == '0')) {
+		socket.emit('save winner', { winner: 'Player1' });
+
 		document.getElementById('print')
 			.innerHTML = "Player 0 won";
 		b1btn.disabled = true;
@@ -319,6 +436,12 @@ function myfunc() {
 		b4btn.style.color = "red";
 		b5btn.style.color = "red";
 		b6btn.style.color = "red";
+
+        socket.emit('go to list page2',);
+
+		// window.location.href = '/list'; // Redirect to user list page
+
+
 	}
 
 	// Checking of Player 0 finish 
@@ -329,21 +452,17 @@ function myfunc() {
 			b5 == '0') && (b6 == 'X' || b6 == '0') &&
 		(b7 == 'X' || b7 == '0') && (b8 == 'X' ||
 			b8 == '0') && (b9 == 'X' || b9 == '0')) {
+				socket.emit('save winner', { winner: 'Match Tie' });
+
 		document.getElementById('print')
 			.innerHTML = "Match Tie";
-	}
-	else {
 
-		// Here, Printing Result 
-		if (flag == 1) {
-			document.getElementById('print')
-				.innerHTML = "Player X Turn";
-		}
-		else {
-			document.getElementById('print')
-				.innerHTML = "Player 0 Turn";
-		}
+			socket.emit('go to list page2',);
+
+		// window.location.href = '/list'; // Redirect to user list page
+
 	}
+	
 }
 
 
@@ -454,10 +573,21 @@ socket.on('box update', ({ boxId, value }) => {
 		box.disabled = true; // Disable the box to prevent further changes
 	}
 
-    myfunc();
+	myfunc();
 
 });
 
+socket.on('save username', ({username}) => {
+    console.log(`${username} is username`);
+    //localStorage.setItem('username', username);
+});
+
+socket.on('list page', ({ username }) => {
+    console.log(`${username} is username`);
+    localStorage.setItem('username', username);
+    window.location.href = '/list'; // Redirect to user list page
+
+});
 
 
 
@@ -466,7 +596,7 @@ socket.on('box update', ({ boxId, value }) => {
 document.addEventListener('DOMContentLoaded', () => {
 	const username = localStorage.getItem('username');
 	const groupId = localStorage.getItem('groupId');
-	
+
 
 	if (username && groupId) {
 		socket.emit('user login game page', { username, groupId });

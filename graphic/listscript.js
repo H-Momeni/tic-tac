@@ -75,7 +75,7 @@ function redirectToPage(username,groupId) {
     localStorage.setItem('groupId', groupId);
     
 
-    socket.emit('user login game page',{username,groupId});
+    //socket.emit('user login game page',{username,groupId});
     window.location.href = `/tic`;
 }
 
@@ -91,7 +91,7 @@ function redirectToPagee(username,groupId) {
     localStorage.setItem('groupId', groupId);
     
 
-    socket.emit('user login game page',{username,groupId});
+    //socket.emit('user login game page',{username,groupId});
     window.location.href = `/toe`;
 }
 
@@ -117,9 +117,12 @@ socket.on('invite rejected', ({ toUsername }) => {
     alert(`${toUsername} rejected your game invite.`);
 });
 
+
 // Emit user login event when the page loads
 document.addEventListener('DOMContentLoaded', () => {
     const username = localStorage.getItem('username');
+    console.log(`${username} is username!!!!`);
+
     if (username) {
         socket.emit('user login', username);
     } else {

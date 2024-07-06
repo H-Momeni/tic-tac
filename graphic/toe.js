@@ -4,7 +4,7 @@ const socket = io();
 function handleBoxChange(boxId) {
     const box = document.getElementById(boxId);
     const value = box.value;
-   
+
     freezePage();
 
     // Emit the box change event to the server
@@ -36,12 +36,14 @@ function unfreezePage() {
     // Remove the modal overlay
     const overlay = document.querySelector('.modal-overlay');
     if (overlay) {
-      overlay.remove();
+        overlay.remove();
     }
-  
+
     // Restore the body element's style
     document.body.style.overflow = 'auto';
-  }
+}
+
+
 
 // Function called whenever user tab on any box 
 function myfunc() {
@@ -87,6 +89,11 @@ function myfunc() {
         b1btn.style.color = "red";
         b2btn.style.color = "red";
         b3btn.style.color = "red";
+
+        socket.emit('go to list page',);
+
+        //window.location.href = '/list'; // Redirect to user list page
+
     }
     else if ((b1 == 'x' || b1 == 'X') && (b4 == 'x' ||
         b4 == 'X') && (b7 == 'x' || b7 == 'X')) {
@@ -102,6 +109,11 @@ function myfunc() {
         b1btn.style.color = "red";
         b4btn.style.color = "red";
         b7btn.style.color = "red";
+
+        socket.emit('go to list page',);
+
+        //window.location.href = '/list'; // Redirect to user list page
+
     }
     else if ((b7 == 'x' || b7 == 'X') && (b8 == 'x' ||
         b8 == 'X') && (b9 == 'x' || b9 == 'X')) {
@@ -118,6 +130,11 @@ function myfunc() {
         b7btn.style.color = "red";
         b8btn.style.color = "red";
         b9btn.style.color = "red";
+
+        socket.emit('go to list page',);
+
+        //window.location.href = '/list'; // Redirect to user list page
+
     }
     else if ((b3 == 'x' || b3 == 'X') && (b6 == 'x' ||
         b6 == 'X') && (b9 == 'x' || b9 == 'X')) {
@@ -134,6 +151,11 @@ function myfunc() {
         b3btn.style.color = "red";
         b6btn.style.color = "red";
         b9btn.style.color = "red";
+
+        socket.emit('go to list page',);
+
+        // window.location.href = '/list'; // Redirect to user list page
+
     }
     else if ((b1 == 'x' || b1 == 'X') && (b5 == 'x' ||
         b5 == 'X') && (b9 == 'x' || b9 == 'X')) {
@@ -149,6 +171,11 @@ function myfunc() {
         b1btn.style.color = "red";
         b5btn.style.color = "red";
         b9btn.style.color = "red";
+
+        socket.emit('go to list page',);
+
+        // window.location.href = '/list'; // Redirect to user list page
+
     }
     else if ((b3 == 'x' || b3 == 'X') && (b5 == 'x' ||
         b5 == 'X') && (b7 == 'x' || b7 == 'X')) {
@@ -164,6 +191,11 @@ function myfunc() {
         b3btn.style.color = "red";
         b5btn.style.color = "red";
         b7btn.style.color = "red";
+
+        socket.emit('go to list page',);
+
+        // window.location.href = '/list'; // Redirect to user list page
+
     }
     else if ((b2 == 'x' || b2 == 'X') && (b5 == 'x' ||
         b5 == 'X') && (b8 == 'x' || b8 == 'X')) {
@@ -179,6 +211,11 @@ function myfunc() {
         b2btn.style.color = "red";
         b5btn.style.color = "red";
         b8btn.style.color = "red";
+
+        socket.emit('go to list page',);
+
+        // window.location.href = '/list'; // Redirect to user list page
+
     }
     else if ((b4 == 'x' || b4 == 'X') && (b5 == 'x' ||
         b5 == 'X') && (b6 == 'x' || b6 == 'X')) {
@@ -194,6 +231,11 @@ function myfunc() {
         b4btn.style.color = "red";
         b5btn.style.color = "red";
         b6btn.style.color = "red";
+
+        socket.emit('go to list page',);
+
+        // window.location.href = '/list'; // Redirect to user list page
+
     }
 
     // Checking of Player X finish 
@@ -213,6 +255,11 @@ function myfunc() {
         b1btn.style.color = "red";
         b2btn.style.color = "red";
         b3btn.style.color = "red";
+
+        socket.emit('go to list page',);
+
+        // window.location.href = '/list'; // Redirect to user list page
+
     }
     else if ((b1 == '0' || b1 == '0') && (b4 == '0' ||
         b4 == '0') && (b7 == '0' || b7 == '0')) {
@@ -228,6 +275,11 @@ function myfunc() {
         b1btn.style.color = "red";
         b4btn.style.color = "red";
         b7btn.style.color = "red";
+
+        socket.emit('go to list page',);
+
+        // window.location.href = '/list'; // Redirect to user list page
+
     }
     else if ((b7 == '0' || b7 == '0') && (b8 == '0' ||
         b8 == '0') && (b9 == '0' || b9 == '0')) {
@@ -243,6 +295,11 @@ function myfunc() {
         b7btn.style.color = "red";
         b8btn.style.color = "red";
         b9btn.style.color = "red";
+
+        socket.emit('go to list page',);
+
+        // window.location.href = '/list'; // Redirect to user list page
+
     }
     else if ((b3 == '0' || b3 == '0') && (b6 == '0' ||
         b6 == '0') && (b9 == '0' || b9 == '0')) {
@@ -257,6 +314,11 @@ function myfunc() {
         b3btn.style.color = "red";
         b6btn.style.color = "red";
         b9btn.style.color = "red";
+
+        socket.emit('go to list page',);
+
+        // window.location.href = '/list'; // Redirect to user list page
+
     }
     else if ((b1 == '0' || b1 == '0') && (b5 == '0' ||
         b5 == '0') && (b9 == '0' || b9 == '0')) {
@@ -272,6 +334,11 @@ function myfunc() {
         b1btn.style.color = "red";
         b5btn.style.color = "red";
         b9btn.style.color = "red";
+
+        socket.emit('go to list page',);
+
+        // window.location.href = '/list'; // Redirect to user list page
+
     }
     else if ((b3 == '0' || b3 == '0') && (b5 == '0' ||
         b5 == '0') && (b7 == '0' || b7 == '0')) {
@@ -287,6 +354,11 @@ function myfunc() {
         b3btn.style.color = "red";
         b5btn.style.color = "red";
         b7btn.style.color = "red";
+
+        socket.emit('go to list page',);
+
+        // window.location.href = '/list'; // Redirect to user list page
+
     }
     else if ((b2 == '0' || b2 == '0') && (b5 == '0' ||
         b5 == '0') && (b8 == '0' || b8 == '0')) {
@@ -302,6 +374,11 @@ function myfunc() {
         b2btn.style.color = "red";
         b5btn.style.color = "red";
         b8btn.style.color = "red";
+
+        socket.emit('go to list page',);
+
+        // window.location.href = '/list'; // Redirect to user list page
+
     }
     else if ((b4 == '0' || b4 == '0') && (b5 == '0' ||
         b5 == '0') && (b6 == '0' || b6 == '0')) {
@@ -317,6 +394,11 @@ function myfunc() {
         b4btn.style.color = "red";
         b5btn.style.color = "red";
         b6btn.style.color = "red";
+
+        socket.emit('go to list page',);
+
+        // window.location.href = '/list'; // Redirect to user list page
+
     }
 
     // Checking of Player 0 finish 
@@ -329,19 +411,13 @@ function myfunc() {
             b8 == '0') && (b9 == 'X' || b9 == '0')) {
         document.getElementById('print')
             .innerHTML = "Match Tie";
-    }
-    else {
 
-        // Here, Printing Result 
-        if (flag == 1) {
-            document.getElementById('print')
-                .innerHTML = "Player X Turn";
-        }
-        else {
-            document.getElementById('print')
-                .innerHTML = "Player 0 Turn";
-        }
+        socket.emit('go to list page',);
+
+        // window.location.href = '/list'; // Redirect to user list page
+
     }
+
 }
 
 
@@ -353,7 +429,7 @@ function myfunc_3() {
 
     document.getElementById("b1").value = "X";
     document.getElementById("b1").disabled = true;
- 
+
     handleBoxChange("b1");
 }
 
@@ -431,7 +507,7 @@ function myfunc_11() {
 // Listen for box updates from the server
 socket.on('box update', ({ boxId, value }) => {
     const box = document.getElementById(boxId);
-   
+
     unfreezePage();
     if (box) {
         box.value = value;
@@ -440,6 +516,20 @@ socket.on('box update', ({ boxId, value }) => {
     myfunc();
 });
 
+socket.on('save username', ({ username }) => {
+    console.log(`${username} is username`);
+    //localStorage.setItem('username', username);
+});
+
+socket.on('list page', ({ username }) => {
+    console.log(`${username} is username`);
+    localStorage.setItem('username', username);
+    window.location.href = '/list'; // Redirect to user list page
+
+});
+
+
+
 
 
 
@@ -447,6 +537,7 @@ socket.on('box update', ({ boxId, value }) => {
 document.addEventListener('DOMContentLoaded', () => {
     const username = localStorage.getItem('username');
     const groupId = localStorage.getItem('groupId');
+    freezePage();
 
     if (username && groupId) {
         socket.emit('user login game page', { username, groupId });

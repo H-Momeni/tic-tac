@@ -5,6 +5,10 @@ const socketIO = require('socket.io');
 var p2p = require('socket.io-p2p-server').Server;
 const http = require('http');
 const User = require('./models/User'); // Import the User model
+const History = require('./models/History'); // Import the History model
+const Error = require('./models/Error');
+
+
 
 const app = express();
 app.use(express.json()); // Middleware to parse JSON bodies
@@ -100,8 +104,66 @@ io.on('connection', (socket) => {
     });
 
     // Handle disconnection
-    socket.on('disconnect', () => {
+    socket.on('disconnect', async () => {
         console.log('User disconnected:', socket.id);
+        let finduser = null;
+        let findgroupidd = null;
+
+
+        for (const groupId in groups) {
+            // Check if the group exists
+            if (groups.hasOwnProperty(groupId)) {
+                // Iterate through the members in the group
+                for (let i = 0; i < groups[groupId].members.length; i++) {
+                    // Check if the current member's socket ID matches the target socket ID
+                    if (groups[groupId].members[i].socketId === socket.id) {
+                        // If a match is found, return the group ID
+                        findgroupidd = groupId;
+                        finduser = groups[groupId].members[i].username;
+                    }
+                }
+            }
+        }
+
+        if (findgroupidd) {
+            try {
+                // Find the document in the History collection with the same group ID
+                const historyEntry = await History.findOne({ groupid: findgroupidd });
+
+                if (historyEntry) {
+                    // Check if the winner field is still unknown
+                    if (historyEntry.winner === 'unknown') {
+                        // Save the username and socket ID in the Error collection
+                        const errorEntry = new Error({
+                            username: finduser,
+                            socketID: socket.id
+                        });
+                        await errorEntry.save();
+                        console.log(`Error entry saved successfully for user: ${finduser}, Socket ID: ${socket.id}`);
+                    } else {
+                        console.log(`Winner already decided for group ID ${findgroupidd}`);
+                    }
+                } else {
+                    console.log(`No document found for group ID ${findgroupidd}`);
+                }
+            } catch (error) {
+                console.error('Error processing disconnection:', error);
+            }
+        } else {
+            console.log('Group ID not found for the current socket ID.');
+        }
+
+
+
+        setTimeout(() => {
+            // Emit the username to the client before deleting the user
+            if (finduser) {
+                console.log(`${finduser} is this!!!`);
+                socket.emit('save username', { username: finduser });
+            }
+        }, 2000);
+
+
         delete onlineUsers[socket.id];
         delete usergame[socket.id];
         io.emit('online users', Object.values(onlineUsers));
@@ -156,7 +218,7 @@ io.on('connection', (socket) => {
         }
     });
 
-    
+
 
     // Handle user login for game page
     socket.on('user login game page', ({ username, groupId }) => {
@@ -174,11 +236,11 @@ io.on('connection', (socket) => {
 
     });
 
-   
+
 
 
     // Handle invite acceptance
-    socket.on('accept invite', (fromSocketId) => {
+    socket.on('accept invite', async (fromSocketId) => {
         const toUsername = onlineUsers[socket.id];
         const toSocketId = socket.id;
         const fromUsername = onlineUsers[fromSocketId];
@@ -199,7 +261,75 @@ io.on('connection', (socket) => {
             io.to(fromSocketId).emit('redirect to gamee', { username: fromUsername, groupId });
         }, 1000);
 
+        // Save the information in history
+        try {
+            let historyEntry = await History.findOne({ groupid: groupId });
+            if (historyEntry) {
+                console.log('History entry already exists');
+                historyEntry.winner = 'unknown'; // Set the winner to unknown
+                await historyEntry.save();
+                console.log('Winner updated to unknown');
+            } else {
+                historyEntry = new History({
+                    groupid: groupId,
+                    player1: toUsername,
+                    player2: fromUsername,
+                    winner: 'unknown', // Initially, set the winner as unknown
+                });
+                await historyEntry.save();
+                console.log('History entry saved successfully');
+            }
+        } catch (error) {
+            console.error('Error checking or saving history entry:', error);
+        }
+
     });
+
+    socket.on('save winner', async (data) => {
+
+        for (const groupId in groups) {
+            // Check if the group exists
+            if (groups.hasOwnProperty(groupId)) {
+                // Iterate through the members in the group
+                for (let i = 0; i < groups[groupId].members.length; i++) {
+                    // Check if the current member's socket ID matches the target socket ID
+                    if (groups[groupId].members[i].socketId === socket.id) {
+                        // If a match is found, return the group ID
+                        findgroupid = groupId;
+                    }
+                }
+            }
+        }
+
+        if (findgroupid) {
+            try {
+                console.log(`Updating winner for group ID ${findgroupid} with winner ${data.winner}`);
+
+                const updatedDocument = await History.findOneAndUpdate(
+                    { groupid: findgroupid },
+                    { winner: data.winner },
+                    { new: true } // Return the updated document
+                );
+
+                if (updatedDocument) {
+                    console.log(`Winner updated successfully for group ID ${findgroupid}`);
+                    console.log('Updated Document:', updatedDocument);
+                } else {
+                    console.log(`No document found for group ID ${findgroupid}`);
+                }
+            } catch (error) {
+                console.error('Error updating winner:', error);
+            }
+        } else {
+            console.log('Group ID not found for the current socket ID.');
+        }
+
+
+
+
+    });
+
+
 
     // Handle invite rejection
     socket.on('reject invite', (fromSocketId) => {
@@ -207,7 +337,59 @@ io.on('connection', (socket) => {
         io.to(fromSocketId).emit('invite rejected', { toUsername });
     });
 
+    socket.on('go to list page', () => {
 
+
+
+        for (const groupId in groups) {
+            // Check if the group exists
+            if (groups.hasOwnProperty(groupId)) {
+                // Iterate through the members in the group
+                for (let i = 0; i < groups[groupId].members.length; i++) {
+                    // Check if the current member's socket ID matches the target socket ID
+                    if (groups[groupId].members[i].socketId === socket.id) {
+                        // If a match is found, return the group ID
+                        finduser = groups[groupId].members[i].username;
+                    }
+                }
+            }
+        }
+
+        console.log(`in the go to list page my name is ${finduser}`);
+
+
+        io.to(socket.id).emit('list page', { username: finduser });
+
+
+    });
+
+    socket.on('go to list page2', () => {
+
+
+        setTimeout(() => {
+            for (const groupId in groups) {
+                // Check if the group exists
+                if (groups.hasOwnProperty(groupId)) {
+                    // Iterate through the members in the group
+                    for (let i = 0; i < groups[groupId].members.length; i++) {
+                        // Check if the current member's socket ID matches the target socket ID
+                        if (groups[groupId].members[i].socketId === socket.id) {
+                            // If a match is found, return the group ID
+                            finduser = groups[groupId].members[i].username;
+                        }
+                    }
+                }
+            }
+
+            console.log(`in the go to list page my name is ${finduser}`);
+
+
+            io.to(socket.id).emit('list page', { username: finduser });
+        }, 3000);
+
+
+
+    });
 
 
 });
